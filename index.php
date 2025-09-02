@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
@@ -43,6 +43,54 @@
         .header p {
             font-size: 1.1rem;
             opacity: 0.9;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .mode-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .mode-card.active {
+            border-color: #007bff;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        }
+
+        .mode-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .mode-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .mode-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
         }
 
         .stats {
@@ -83,6 +131,13 @@
             line-height: 2;
             border: 2px solid #e9ecef;
             min-height: 150px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .text-display.code-mode {
+            background: #1e1e1e;
+            color: #f0f0f0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
         }
 
         .word {
@@ -151,6 +206,7 @@
             gap: 15px;
             margin-top: 20px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -229,6 +285,55 @@
             font-size: 1.1rem;
         }
 
+        .hand-indicator {
+            display: none;
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .hand-indicator.left-hand {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .hand-indicator.right-hand {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .hand-indicator.right-index {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+        }
+
+        .hand-indicator.right-middle {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #333;
+        }
+
+        .hand-indicator.right-ring {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .hand-indicator.right-pinky {
+            background: linear-gradient(135deg, #ff8a80, #ff5722);
+            color: white;
+        }
+
+        .english-word {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .translation {
+            color: #6c757d;
+            font-style: italic;
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -238,13 +343,90 @@
         .word.current {
             animation: pulse 1s infinite;
         }
+
+        @media (max-width: 768px) {
+            .mode-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>?? Belajar Typing</h1>
-            <p>Latihan mengetik dengan 200 kata pendek - Tingkatkan kecepatan dan akurasi Anda!</p>
+            <h1>⌨️ Belajar Typing</h1>
+            <p>Platform pembelajaran mengetik dengan berbagai mode latihan</p>
+        </div>
+
+        <div class="mode-selector">
+            <div class="mode-card" onclick="selectMode('basic')" id="mode-basic">
+                <div class="mode-icon">📝</div>
+                <div class="mode-title">Kata Dasar</div>
+                <div class="mode-description">Latihan dengan kata-kata Indonesia sehari-hari</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('code')" id="mode-code">
+                <div class="mode-icon">💻</div>
+                <div class="mode-title">Kode Programming</div>
+                <div class="mode-description">Latihan mengetik potongan kode</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('english')" id="mode-english">
+                <div class="mode-icon">🇺🇸</div>
+                <div class="mode-title">Bahasa Inggris</div>
+                <div class="mode-description">Kosakata Inggris dengan terjemahan</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('lefthand')" id="mode-lefthand">
+                <div class="mode-icon">👈</div>
+                <div class="mode-title">Tangan Kiri</div>
+                <div class="mode-description">Khusus huruf tangan kiri (Q,W,E,R,T,A,S,D,F,G,Z,X,C,V,B)</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('righthand')" id="mode-righthand">
+                <div class="mode-icon">👉</div>
+                <div class="mode-title">Tangan Kanan</div>
+                <div class="mode-description">Khusus huruf tangan kanan (Y,U,I,O,P,H,J,K,L,N,M)</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('rightindex')" id="mode-rightindex">
+                <div class="mode-icon">👆</div>
+                <div class="mode-title">Jari Telunjuk Kanan</div>
+                <div class="mode-description">Huruf Y, U, H, J, N, M</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('rightmiddle')" id="mode-rightmiddle">
+                <div class="mode-icon">🖕</div>
+                <div class="mode-title">Jari Tengah Kanan</div>
+                <div class="mode-description">Huruf I, K</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('rightring')" id="mode-rightring">
+                <div class="mode-icon">💍</div>
+                <div class="mode-title">Jari Manis Kanan</div>
+                <div class="mode-description">Huruf O, L</div>
+            </div>
+            
+            <div class="mode-card" onclick="selectMode('rightpinky')" id="mode-rightpinky">
+                <div class="mode-icon">🤙</div>
+                <div class="mode-title">Jari Kelingking Kanan</div>
+                <div class="mode-description">Huruf P</div>
+            </div>
         </div>
 
         <div class="stats">
@@ -262,7 +444,7 @@
             </div>
             <div class="stat-item">
                 <div class="stat-value" id="progress">0/30</div>
-                <div class="stat-label">Kata</div>
+                <div class="stat-label">Progress</div>
             </div>
         </div>
 
@@ -271,6 +453,8 @@
         </div>
 
         <div class="typing-area">
+            <div class="hand-indicator" id="handIndicator"></div>
+            
             <div class="text-display" id="textDisplay"></div>
             
             <div class="input-area">
@@ -278,62 +462,130 @@
             </div>
 
             <div class="controls">
-                <button class="btn btn-primary" onclick="startNewTest()">?? Tes Baru</button>
-                <button class="btn btn-success" onclick="startEasyMode()">?? Mode Mudah</button>
-                <button class="btn btn-warning" onclick="startHardMode()">?? Mode Sulit</button>
+                <button class="btn btn-primary" onclick="startNewTest()">🔄 Tes Baru</button>
+                <button class="btn btn-success" onclick="startEasyMode()">😊 Mode Mudah</button>
+                <button class="btn btn-warning" onclick="startHardMode()">🔥 Mode Sulit</button>
             </div>
 
             <div class="completion-message" id="completionMessage">
-                <h2>?? Selamat! Tes Selesai!</h2>
+                <h2>🎉 Selamat! Tes Selesai!</h2>
                 <div class="accuracy-display" id="finalStats"></div>
             </div>
         </div>
     </div>
 
     <script>
-        const words200 = [
-            // Kata-kata umum sehari-hari
-            "dan", "ini", "itu", "ada", "dia", "kamu", "saya", "kami", "mereka", "yang",
-            "dari", "untuk", "dengan", "pada", "dalam", "akan", "sudah", "telah", "bisa", "dapat",
-            "tidak", "juga", "hanya", "masih", "lebih", "sangat", "paling", "cukup", "agak", "tapi",
-            "atau", "jika", "kalau", "ketika", "saat", "waktu", "hari", "tahun", "bulan", "minggu",
+        // Word lists - dapat dipindah ke file terpisah
+        const wordLists = {
+            basic: [
+                "dan", "ini", "itu", "ada", "dia", "kamu", "saya", "kami", "mereka", "yang",
+                "dari", "untuk", "dengan", "pada", "dalam", "akan", "sudah", "telah", "bisa", "dapat",
+                "tidak", "juga", "hanya", "masih", "lebih", "sangat", "paling", "cukup", "agak", "tapi",
+                "atau", "jika", "kalau", "ketika", "saat", "waktu", "hari", "tahun", "bulan", "minggu",
+                "buat", "ambil", "kasih", "taruh", "lihat", "dengar", "bicara", "jalan", "lari", "naik",
+                "turun", "masuk", "keluar", "datang", "pergi", "pulang", "tidur", "bangun", "makan", "minum",
+                "kerja", "main", "baca", "tulis", "hitung", "pikir", "ingat", "lupa", "tahu", "kenal",
+                "rumah", "mobil", "motor", "sepeda", "jalan", "toko", "pasar", "sekolah", "kantor", "hotel",
+                "meja", "kursi", "tempat", "tidur", "lemari", "pintu", "jendela", "lantai", "atap", "dinding",
+                "buku", "pensil", "pulpen", "kertas", "komputer", "telepon", "televisi", "radio", "jam", "kunci"
+            ],
             
-            // Kata kerja
-            "buat", "ambil", "kasih", "taruh", "lihat", "dengar", "bicara", "jalan", "lari", "naik",
-            "turun", "masuk", "keluar", "datang", "pergi", "pulang", "tidur", "bangun", "makan", "minum",
-            "kerja", "main", "baca", "tulis", "hitung", "pikir", "ingat", "lupa", "tahu", "kenal",
+            code: [
+                "function", "return", "const", "let", "var", "if", "else", "for", "while", "array",
+                "console.log()", "document.getElementById()", "addEventListener", "querySelector",
+                "parseInt()", "toString()", "JSON.parse()", "JSON.stringify()", "setTimeout",
+                "class MyClass {", "constructor()", "this.property", "import React from",
+                "export default", "async function", "await fetch()", "try { } catch",
+                "== === != !==", "&& || !", "++ -- += -=", "=> function", "...spread",
+                "{ key: value }", "[1, 2, 3, 4]", "new Date()", "Math.random()",
+                ".map() .filter()", ".forEach() .reduce()", ".includes() .indexOf()",
+                "getElementById", "createElement", "appendChild", "removeChild",
+                "style.display", "className", "innerHTML", "textContent",
+                "onclick onload", "keydown keyup", "mouseenter mouseleave",
+                "padding margin", "border-radius", "background-color", "font-size",
+                "#container .class", "position: absolute", "display: flex", "justify-content"
+            ],
             
-            // Benda-benda
-            "rumah", "mobil", "motor", "sepeda", "jalan", "toko", "pasar", "sekolah", "kantor", "hotel",
-            "meja", "kursi", "tempat", "tidur", "lemari", "pintu", "jendela", "lantai", "atap", "dinding",
-            "buku", "pensil", "pulpen", "kertas", "komputer", "telepon", "televisi", "radio", "jam", "kunci",
+            english: [
+                "hello:halo", "world:dunia", "computer:komputer", "keyboard:papan ketik", "mouse:tetikus",
+                "screen:layar", "internet:internet", "website:situs web", "email:email", "password:kata sandi",
+                "user:pengguna", "admin:administrator", "login:masuk", "logout:keluar", "register:daftar",
+                "home:beranda", "about:tentang", "contact:kontak", "service:layanan", "product:produk",
+                "price:harga", "buy:beli", "sell:jual", "search:cari", "find:temukan",
+                "create:buat", "delete:hapus", "edit:ubah", "save:simpan", "cancel:batal",
+                "open:buka", "close:tutup", "start:mulai", "stop:berhenti", "pause:jeda",
+                "play:putar", "next:selanjutnya", "previous:sebelumnya", "first:pertama", "last:terakhir",
+                "name:nama", "age:usia", "address:alamat", "phone:telepon", "family:keluarga",
+                "friend:teman", "school:sekolah", "work:kerja", "office:kantor", "meeting:rapat",
+                "time:waktu", "date:tanggal", "year:tahun", "month:bulan", "week:minggu",
+                "today:hari ini", "tomorrow:besok", "yesterday:kemarin", "morning:pagi", "afternoon:siang",
+                "evening:sore", "night:malam", "water:air", "food:makanan", "drink:minuman"
+            ],
             
-            // Makanan & minuman
-            "nasi", "roti", "mie", "sayur", "buah", "daging", "ikan", "ayam", "telur", "susu",
-            "air", "teh", "kopi", "jus", "gula", "garam", "cabai", "bawang", "tomat", "wortel",
+            lefthand: [
+                "cat", "rat", "bat", "fat", "sat", "at", "as", "are", "car", "far",
+                "bar", "tar", "war", "ear", "wear", "bear", "fear", "dear", "gear", "tear",
+                "west", "best", "test", "rest", "nest", "fest", "guest", "chest", "quest",
+                "water", "after", "later", "faster", "master", "matter", "better", "letter",
+                "great", "bread", "break", "treat", "create", "breath", "threat", "sweat",
+                "cart", "part", "start", "heart", "smart", "chart", "apart", "artist",
+                "face", "race", "place", "trace", "space", "grace", "brace", "embrace",
+                "cast", "fast", "last", "past", "vast", "blast", "coast", "beast",
+                "read", "head", "dead", "lead", "bread", "thread", "spread", "dread",
+                "tree", "free", "three", "agree", "degree", "freeze", "breeze", "cheese"
+            ],
             
-            // Warna & sifat
-            "merah", "biru", "hijau", "kuning", "hitam", "putih", "coklat", "pink", "ungu", "orange",
-            "besar", "kecil", "tinggi", "rendah", "panjang", "pendek", "lebar", "sempit", "tebal", "tipis",
-            "baru", "lama", "muda", "tua", "cepat", "lambat", "keras", "lembut", "panas", "dingin",
+            righthand: [
+                "you", "him", "joy", "boy", "toy", "oil", "boil", "coil", "foil", "soil",
+                "moon", "soon", "noon", "spoon", "bloom", "boom", "room", "zoom", "groom",
+                "pull", "full", "bull", "null", "skull", "dull", "hull", "mull", "cull",
+                "join", "coin", "pain", "main", "rain", "gain", "train", "brain", "plain",
+                "look", "book", "took", "cook", "hook", "brook", "crook", "shook", "nook",
+                "loop", "hoop", "troop", "group", "scoop", "droop", "snoop", "stoop",
+                "jump", "bump", "dump", "pump", "lump", "hump", "trump", "stump", "thump",
+                "lion", "iron", "upon", "union", "onion", "melon", "lemon", "demon",
+                "play", "pray", "gray", "clay", "fray", "spray", "stray", "delay", "relay",
+                "milk", "silk", "bulk", "hulk", "sulk", "skulk", "mulch", "gulch", "lunch"
+            ],
             
-            // Angka & ukuran
-            "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh",
-            "ratus", "ribu", "juta", "meter", "kilo", "gram", "liter", "detik", "menit", "jam",
+            rightindex: [
+                "you", "yum", "yes", "yet", "yay", "yoga", "young", "youth", "your", "year",
+                "hum", "huh", "hey", "him", "his", "hit", "hot", "hat", "hut", "hug",
+                "huge", "hunt", "hurt", "hung", "hull", "hulk", "human", "humor", "humid",
+                "jump", "just", "july", "june", "jury", "junk", "join", "joke", "jazz",
+                "noon", "noun", "nine", "nice", "near", "neck", "need", "neat", "nest",
+                "nuts", "null", "numb", "name", "navy", "nail", "news", "next", "node",
+                "mum", "mud", "mug", "man", "map", "mat", "max", "may", "mix", "mom",
+                "menu", "mind", "mine", "milk", "mild", "mint", "myth", "mood", "moon",
+                "much", "must", "mute", "math", "mesh", "meat", "meet", "mega", "memo"
+            ],
             
-            // Kata sifat emosi
-            "senang", "sedih", "marah", "takut", "kaget", "heran", "bosan", "capek", "sakit", "sehat",
-            "baik", "buruk", "bagus", "jelek", "cantik", "ganteng", "lucu", "aneh", "unik", "biasa",
+            rightmiddle: [
+                "kit", "key", "kid", "kin", "king", "kind", "keep", "keen", "kick", "kill",
+                "kite", "knee", "knew", "know", "knot", "kiwi", "keys", "kept", "kids",
+                "inch", "info", "into", "idea", "item", "iron", "icon", "idle", "idol",
+                "isle", "issue", "image", "inner", "input", "index", "indie", "ideal"
+            ],
             
-            // Keluarga & orang
-            "ayah", "ibu", "anak", "kakak", "adik", "nenek", "kakek", "paman", "bibi", "sepupu",
-            "teman", "guru", "dokter", "petani", "sopir", "pilot", "polisi", "tentara", "chef", "artis",
+            rightring: [
+                "old", "our", "oil", "owl", "oak", "oat", "odd", "off", "one", "own",
+                "open", "oral", "oval", "over", "once", "only", "onto", "opus", "okra",
+                "loop", "look", "love", "lose", "lost", "long", "load", "loan", "lock",
+                "loud", "low", "lot", "log", "lab", "lap", "law", "lay", "led", "leg",
+                "let", "lie", "lid", "lip", "lit", "live", "link", "line", "lime", "lion"
+            ],
             
-            // Cuaca & alam
-            "hujan", "panas", "dingin", "angin", "mendung", "cerah", "laut", "gunung", "hutan", "sawah",
-            "sungai", "danau", "pantai", "pasir", "batu", "tanah", "rumput", "pohon", "bunga", "daun"
-        ];
+            rightpinky: [
+                "pop", "put", "pen", "pan", "pat", "pay", "paw", "pod", "pub", "pup",
+                "pile", "pine", "pink", "pipe", "pull", "pump", "punk", "pure", "push",
+                "page", "pain", "pair", "pale", "palm", "park", "part", "pass", "past",
+                "path", "peak", "peer", "pick", "pile", "plan", "play", "plot", "plus",
+                "poem", "poet", "pool", "poor", "port", "post", "pour", "pray", "prep"
+            ]
+        };
 
+        // Global variables
+        let currentMode = 'basic';
         let currentWords = [];
         let currentWordIndex = 0;
         let currentCharIndex = 0;
@@ -343,8 +595,61 @@
         let testActive = false;
         let timer = null;
 
+        function selectMode(mode) {
+            // Remove active class from all mode cards
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to selected mode
+            document.getElementById(`mode-${mode}`).classList.add('active');
+            
+            currentMode = mode;
+            
+            // Update display based on mode
+            const textDisplay = document.getElementById('textDisplay');
+            const handIndicator = document.getElementById('handIndicator');
+            
+            // Reset classes
+            textDisplay.classList.remove('code-mode');
+            handIndicator.style.display = 'none';
+            handIndicator.classList.remove('left-hand', 'right-hand');
+            
+            // Apply mode-specific styling
+            if (mode === 'code') {
+                textDisplay.classList.add('code-mode');
+            } else if (mode === 'lefthand') {
+                handIndicator.style.display = 'block';
+                handIndicator.classList.add('left-hand');
+                handIndicator.textContent = '👈 Mode Tangan Kiri - Gunakan huruf: Q,W,E,R,T,A,S,D,F,G,Z,X,C,V,B';
+            } else if (mode === 'righthand') {
+                handIndicator.style.display = 'block';
+                handIndicator.classList.add('right-hand');
+                handIndicator.textContent = '👉 Mode Tangan Kanan - Gunakan huruf: Y,U,I,O,P,H,J,K,L,N,M';
+            } else if (mode === 'rightindex') {
+                handIndicator.style.display = 'block';
+                handIndicator.classList.add('right-index');
+                handIndicator.textContent = '👆 Mode Jari Telunjuk Kanan - Gunakan huruf: Y, U, H, J, N, M';
+            } else if (mode === 'rightmiddle') {
+                handIndicator.style.display = 'block';
+                handIndicator.classList.add('right-middle');
+                handIndicator.textContent = '🖕 Mode Jari Tengah Kanan - Gunakan huruf: I, K';
+            } else if (mode === 'rightring') {
+                handIndicator.style.display = 'block';
+                handIndicator.classList.add('right-ring');
+                handIndicator.textContent = '💍 Mode Jari Manis Kanan - Gunakan huruf: O, L';
+            } else if (mode === 'rightpinky') {
+                handIndicator.style.display = 'block';
+                handIndicator.classList.add('right-pinky');
+                handIndicator.textContent = '🤙 Mode Jari Kelingking Kanan - Gunakan huruf: P';
+            }
+            
+            startNewTest();
+        }
+
         function getRandomWords(count = 30) {
-            const shuffled = [...words200].sort(() => 0.5 - Math.random());
+            const words = wordLists[currentMode] || wordLists.basic;
+            const shuffled = [...words].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
         }
 
@@ -363,13 +668,35 @@
                     wordSpan.classList.add('completed');
                 }
                 
-                word.split('').forEach((char, charIndex) => {
-                    const charSpan = document.createElement('span');
-                    charSpan.className = 'char';
-                    charSpan.textContent = char;
-                    charSpan.id = `char-${wordIndex}-${charIndex}`;
-                    wordSpan.appendChild(charSpan);
-                });
+                // Handle English mode with translations
+                if (currentMode === 'english' && word.includes(':')) {
+                    const [englishWord, translation] = word.split(':');
+                    
+                    const englishSpan = document.createElement('span');
+                    englishSpan.className = 'english-word';
+                    englishWord.split('').forEach((char, charIndex) => {
+                        const charSpan = document.createElement('span');
+                        charSpan.className = 'char';
+                        charSpan.textContent = char;
+                        charSpan.id = `char-${wordIndex}-${charIndex}`;
+                        englishSpan.appendChild(charSpan);
+                    });
+                    
+                    const translationSpan = document.createElement('span');
+                    translationSpan.className = 'translation';
+                    translationSpan.textContent = ` (${translation})`;
+                    
+                    wordSpan.appendChild(englishSpan);
+                    wordSpan.appendChild(translationSpan);
+                } else {
+                    word.split('').forEach((char, charIndex) => {
+                        const charSpan = document.createElement('span');
+                        charSpan.className = 'char';
+                        charSpan.textContent = char;
+                        charSpan.id = `char-${wordIndex}-${charIndex}`;
+                        wordSpan.appendChild(charSpan);
+                    });
+                }
                 
                 textDisplay.appendChild(wordSpan);
             });
@@ -383,7 +710,7 @@
 
         function calculateWPM() {
             if (!startTime) return 0;
-            const timeElapsed = (Date.now() - startTime) / 1000 / 60; // in minutes
+            const timeElapsed = (Date.now() - startTime) / 1000 / 60;
             const wordsTyped = currentWordIndex + (currentCharIndex > 0 ? 1 : 0);
             return Math.round(wordsTyped / timeElapsed) || 0;
         }
@@ -403,6 +730,14 @@
             updateProgress();
         }
 
+        function getCurrentWord() {
+            let word = currentWords[currentWordIndex];
+            if (currentMode === 'english' && word.includes(':')) {
+                word = word.split(':')[0]; // Only the English word for typing
+            }
+            return word;
+        }
+
         function handleInput(event) {
             const input = event.target;
             const inputValue = input.value;
@@ -413,16 +748,13 @@
                 timer = setInterval(updateStats, 100);
             }
 
-            const currentWord = currentWords[currentWordIndex];
+            const currentWord = getCurrentWord();
             const currentWordElement = document.getElementById(`word-${currentWordIndex}`);
             
-            // Check if word is completed with space
             if (inputValue.endsWith(' ') && inputValue.trim() === currentWord) {
-                // Word completed correctly
                 currentWordElement.classList.remove('current', 'error');
                 currentWordElement.classList.add('completed');
                 
-                // Clear input and move to next word
                 input.value = '';
                 currentWordIndex++;
                 currentCharIndex = 0;
@@ -431,28 +763,26 @@
                     const nextWordElement = document.getElementById(`word-${currentWordIndex}`);
                     nextWordElement.classList.add('current');
                 } else {
-                    // Test completed
                     completeTest();
                     return;
                 }
             } else {
-                // Reset word styling
                 currentWordElement.classList.remove('error');
                 
-                // Clear previous character styling
                 for (let i = 0; i < currentWord.length; i++) {
                     const charElement = document.getElementById(`char-${currentWordIndex}-${i}`);
-                    charElement.classList.remove('correct', 'incorrect');
+                    if (charElement) {
+                        charElement.classList.remove('correct', 'incorrect');
+                    }
                 }
                 
-                // Check each character (without counting space)
-                const typedWord = inputValue.replace(/ $/, ''); // Remove trailing space for comparison
+                const typedWord = inputValue.replace(/ $/, '');
                 let hasError = false;
                 
                 for (let i = 0; i < Math.max(typedWord.length, currentWord.length); i++) {
                     const charElement = document.getElementById(`char-${currentWordIndex}-${i}`);
                     
-                    if (i < typedWord.length) {
+                    if (i < typedWord.length && charElement) {
                         if (i < currentWord.length && typedWord[i] === currentWord[i]) {
                             charElement.classList.add('correct');
                             if (!charElement.dataset.counted) {
@@ -493,6 +823,7 @@
             
             document.getElementById('completionMessage').style.display = 'block';
             document.getElementById('finalStats').innerHTML = `
+                <p><strong>Mode:</strong> ${getModeTitle()}</p>
                 <p><strong>Waktu:</strong> ${finalTime} detik</p>
                 <p><strong>Kecepatan:</strong> ${finalWPM} WPM</p>
                 <p><strong>Akurasi:</strong> ${finalAccuracy}%</p>
@@ -500,6 +831,17 @@
             `;
             
             document.getElementById('typingInput').disabled = true;
+        }
+
+        function getModeTitle() {
+            const titles = {
+                'basic': 'Kata Dasar',
+                'code': 'Kode Programming',
+                'english': 'Bahasa Inggris',
+                'lefthand': 'Tangan Kiri',
+                'righthand': 'Tangan Kanan'
+            };
+            return titles[currentMode] || 'Unknown';
         }
 
         function resetTest() {
@@ -519,13 +861,11 @@
             document.getElementById('typingInput').disabled = false;
             document.getElementById('completionMessage').style.display = 'none';
             
-            // Reset all character counters
             document.querySelectorAll('.char').forEach(char => {
                 char.dataset.counted = '';
                 char.classList.remove('correct', 'incorrect');
             });
             
-            // Reset stats display
             document.getElementById('wpm').textContent = '0';
             document.getElementById('accuracy').textContent = '100%';
             document.getElementById('time').textContent = '0';
@@ -542,9 +882,22 @@
 
         function startEasyMode() {
             resetTest();
-            // Easy mode: shorter words
-            const easyWords = words200.filter(word => word.length <= 4);
-            currentWords = easyWords.sort(() => 0.5 - Math.random()).slice(0, 25);
+            let easyWords;
+            
+            if (currentMode === 'basic') {
+                easyWords = wordLists.basic.filter(word => word.length <= 4);
+                currentWords = easyWords.sort(() => 0.5 - Math.random()).slice(0, 25);
+            } else if (currentMode === 'code') {
+                easyWords = wordLists.code.filter(word => word.length <= 10);
+                currentWords = easyWords.sort(() => 0.5 - Math.random()).slice(0, 20);
+            } else if (currentMode === 'english') {
+                easyWords = wordLists.english.filter(word => word.split(':')[0].length <= 5);
+                currentWords = easyWords.sort(() => 0.5 - Math.random()).slice(0, 25);
+            } else {
+                easyWords = wordLists[currentMode].filter(word => word.length <= 4);
+                currentWords = easyWords.sort(() => 0.5 - Math.random()).slice(0, 25);
+            }
+            
             displayText();
             updateProgress();
             document.getElementById('typingInput').focus();
@@ -552,9 +905,22 @@
 
         function startHardMode() {
             resetTest();
-            // Hard mode: longer words and more words
-            const hardWords = words200.filter(word => word.length >= 5);
-            currentWords = [...hardWords, ...getRandomWords(20)].slice(0, 40);
+            let hardWords;
+            
+            if (currentMode === 'basic') {
+                hardWords = wordLists.basic.filter(word => word.length >= 6);
+                currentWords = [...hardWords, ...getRandomWords(20)].slice(0, 40);
+            } else if (currentMode === 'code') {
+                hardWords = wordLists.code.filter(word => word.length >= 12);
+                currentWords = [...hardWords, ...getRandomWords(15)].slice(0, 35);
+            } else if (currentMode === 'english') {
+                hardWords = wordLists.english.filter(word => word.split(':')[0].length >= 7);
+                currentWords = [...hardWords, ...getRandomWords(20)].slice(0, 35);
+            } else {
+                hardWords = wordLists[currentMode].filter(word => word.length >= 6);
+                currentWords = [...hardWords, ...getRandomWords(15)].slice(0, 40);
+            }
+            
             displayText();
             updateProgress();
             document.getElementById('typingInput').focus();
@@ -563,23 +929,38 @@
         // Event listeners
         document.getElementById('typingInput').addEventListener('input', handleInput);
         
-        // Allow space but prevent page scrolling
         document.getElementById('typingInput').addEventListener('keydown', function(e) {
             if (e.code === 'Space' && e.target === this) {
-                // Don't prevent default - allow space to be typed
                 e.stopPropagation();
             }
         });
 
-        // Focus input when clicking on text display
         document.getElementById('textDisplay').addEventListener('click', function() {
             document.getElementById('typingInput').focus();
         });
 
-        // Initialize with first test
+        // Initialize
         window.addEventListener('load', function() {
-            startNewTest();
+            selectMode('basic');
         });
+
+        // Function to load external word lists (for future use)
+        async function loadWordList(filename) {
+            try {
+                const response = await fetch(filename);
+                const text = await response.text();
+                return text.split('\n').filter(word => word.trim() !== '');
+            } catch (error) {
+                console.error('Error loading word list:', error);
+                return [];
+            }
+        }
+
+        // Example usage for loading external files:
+        // loadWordList('wordlists/basic.txt').then(words => {
+        //     wordLists.basic = words;
+        // });
     </script>
 </body>
 </html>
+                '
