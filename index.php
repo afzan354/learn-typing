@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -1931,5 +1931,4 @@
     </script>
 </body>
 </html>
-                '
->>>>>>> 93d6c8dccdc9afa46bd6f96806ffba57ad8eeb43
+               
